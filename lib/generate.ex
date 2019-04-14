@@ -110,16 +110,16 @@ defmodule PuppeteerPdf.Generate do
                   end
 
                 :margin_left ->
-                  must_be_integer("--marginLeft", value)
+                  check_css_length("--marginLeft", value)
 
                 :margin_right ->
-                  must_be_integer("--marginRight", value)
+                  check_css_length("--marginRight", value)
 
                 :margin_top ->
-                  must_be_integer("--marginTop", value)
+                  check_css_length("--marginTop", value)
 
                 :margin_bottom ->
-                  must_be_integer("--marginBottom", value)
+                  check_css_length("--marginBottom", value)
 
                 :scale ->
                   with {value, ""} <- Float.parse(to_string(value)),
@@ -130,10 +130,10 @@ defmodule PuppeteerPdf.Generate do
                   end
 
                 :width ->
-                  must_be_integer("--width", value)
+                  check_css_length("--width", value)
 
                 :height ->
-                  must_be_integer("--height", value)
+                  check_css_length("--height", value)
 
                 :debug ->
                   ["--debug"]
@@ -193,14 +193,9 @@ defmodule PuppeteerPdf.Generate do
     end
   end
 
-  @spec must_be_integer(String.t(), Integer.t()) ::
-          list() | {:error, :margin_value_must_be_integer}
-  defp must_be_integer(field, value) when is_integer(value) do
+  # TODO: perform a better check for these values.
+  # See https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units
+  def check_css_length(field, value) do
     [field, to_string(value)]
-  end
-
-  @spec must_be_integer(any(), any()) :: {:error, :margin_value_must_be_integer}
-  defp must_be_integer(_, _) do
-    {:error, :margin_value_must_be_integer}
   end
 end
